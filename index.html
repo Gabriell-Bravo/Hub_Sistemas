@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub de Navegação - CGM</title>
+    <style>
+        /* Variáveis para cores e animações */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --transition-speed: 0.4s;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Reset e estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        body {
+            padding-top: 100px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to bottom, #0b0b2b, #1b2735 70%, #090a0f);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--dark-color);
+
+        }
+
+        .stars {
+            width: 1px;
+            height: 1px;
+            position: absolute;
+            background: white;
+            box-shadow: 2vw 5vh 2px white, 10vw 8vh 2px white, 15vw 15vh 1px white,
+                22vw 22vh 1px white, 28vw 12vh 2px white, 32vw 32vh 1px white,
+                38vw 18vh 2px white, 42vw 35vh 1px white, 48vw 25vh 2px white,
+                53vw 42vh 1px white, 58vw 15vh 2px white, 63vw 38vh 1px white,
+                68vw 28vh 2px white, 73vw 45vh 1px white, 78vw 32vh 2px white,
+                83vw 48vh 1px white, 88vw 20vh 2px white, 93vw 52vh 1px white,
+                98vw 35vh 2px white, 5vw 60vh 1px white, 12vw 65vh 2px white,
+                18vw 72vh 1px white, 25vw 78vh 2px white, 30vw 85vh 1px white,
+                35vw 68vh 2px white, 40vw 82vh 1px white, 45vw 92vh 2px white,
+                50vw 75vh 1px white, 55vw 88vh 2px white, 60vw 95vh 1px white,
+                65vw 72vh 2px white, 70vw 85vh 1px white, 75vw 78vh 2px white,
+                80vw 92vh 1px white, 85vw 82vh 2px white, 90vw 88vh 1px white,
+                95vw 75vh 2px white;
+            animation: twinkle 8s infinite linear;
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, white, transparent);
+            animation: shoot 3s infinite ease-in;
+        }
+
+        .shooting-star:nth-child(1) {
+            top: 20%;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .shooting-star:nth-child(2) {
+            top: 35%;
+            left: -100px;
+            animation-delay: 1s;
+        }
+
+        .shooting-star:nth-child(3) {
+            top: 50%;
+            left: -100px;
+            animation-delay: 2s;
+        }
+
+        .stars::after {
+            content: "";
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: white;
+            box-shadow: 8vw 12vh 2px white, 16vw 18vh 1px white, 24vw 25vh 2px white,
+                33vw 15vh 1px white, 41vw 28vh 2px white, 49vw 35vh 1px white,
+                57vw 22vh 2px white, 65vw 42vh 1px white, 73vw 28vh 2px white,
+                81vw 48vh 1px white, 89vw 32vh 2px white, 97vw 45vh 1px white,
+                3vw 68vh 2px white, 11vw 75vh 1px white, 19vw 82vh 2px white,
+                27vw 88vh 1px white, 35vw 72vh 2px white, 43vw 85vh 1px white,
+                51vw 92vh 2px white, 59vw 78vh 1px white;
+            animation: twinkle 6s infinite linear reverse;
+        }
+
+        /* Cabeçalho */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            width: 120px;
+            height: 120px;
+            margin-bottom: 70px;
+            margin-top: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        p.subtitle {
+            font-size: 1.2rem;
+            color: #ffffff;
+            max-width: 600px;
+            ;
+
+        }
+
+        /* Grid de cards */
+        .sites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .site-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+            animation-delay: calc(var(--delay) * 0.2s);
+        }
+
+        .site-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-image {
+            height: 180px;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom right, transparent 0%, rgba(0, 0, 0, 0.2) 100%);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .card-content p {
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .card-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: background-color var(--transition-speed);
+        }
+
+        .site-card:hover .card-button {
+            background-color: var(--accent-color);
+        }
+
+        /* Rodapé */
+        footer {
+            margin-top: 60px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            animation: fadeIn 1s ease-out forwards;
+            animation-delay: 1s;
+            opacity: 0;
+        }
+
+        /* Animações */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .sites-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.8;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        @keyframes shoot {
+            0% {
+                transform: translateX(0) translateY(0) rotate(25deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(120vw) translateY(50vh) rotate(25deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stars"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star"></div>
+
+    <header>
+        <div class="logo"><img
+                src='https://www.saquarema.rj.gov.br/wp-content/uploads/2025/01/LogoSite_PrefeituraSaquarema_800xProporcional.png'>
+        </div>
+        <h1>Sistemas Da Controladoria Geral do Municipio (CGM) </h1>
+        <p>Selecione para qual site deseja ser direcionado</p>
+    </header>
+
+    <main class="sites-grid">
+        <!-- Card 1 -->
+        <div class="site-card" style="--delay: 1">
+            <div class="card-image">
+                <img src='https://github.com/Gabriell-Bravo/imgs/blob/main/protocolo_tela.png?raw=true'>
+            </div>
+            <div class="card-content">
+                <h3>Sistema Protocolo</h3>
+                <p>nao sei oq escrever</p>
+                <a href="https://sistema-protocolo-cgm-ei4v.vercel.app/accounts/login/?next=/"
+                    class="card-button">Acessar</a>
+            </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="site-card" style="--delay: 2">
+            <div class="card-image">
+                <img src="https://github.com/Gabriell-Bravo/imgs/blob/main/image.png?raw=true" alt="Icone Despacho">
+            </div>
+            <div class="card-content">
+                <h3>Gerador de Despacho</h3>
+                <p>n sei oq escrever.</p>
+                <a href="https://gerador-de-despacho.vercel.app/" class="card-button">Acessar</a>
+            </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="site-card" style="--delay: 3">
+            <div class="card-image">
+                <img src='https://github.com/Gabriell-Bravo/imgs/blob/main/demandas_externa.png?raw=true'>
+            </div>
+            <div class="card-content">
+                <h3>Controle Demandas Externas</h3>
+                <p>n sei ainda.</p>
+                <a href="https://demandas-externas.vercel.app/" class="card-button">Acessar</a>
+            </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="site-card" style="--delay: 4">
+            <div class="card-image">
+                <img src='https://github.com/Gabriell-Bravo/imgs/blob/main/Gerador_combustivel.png?raw=true'>
+            </div>
+            <div class="card-content">
+                <h3>Gerador de Combustivel</h3>
+                <p>Central de ajuda, FAQ e canal de atendimento ao cliente.</p>
+                <a href="https://drive.google.com/file/d/13l7O2d8IwgUenpAjrXk3Q30UYK3BBXD_/view?usp=sharing"
+                    class="card-button">Acessar</a>
+            </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="site-card" style="--delay: 5">
+            <div class="card-image">
+                <i></i>
+            </div>
+            <div class="card-content">
+                <h3>em breve</h3>
+                <p>em breve</p>
+                <a href="#" class="card-button">Acessar</a>
+            </div>
+        </div>
+
+        <!-- Card 6 -->
+
+    </main>
+
+    <footer>
+        <p>© 2025 Controladoria Geral do Municipio. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.site-card');
+
+            // Adiciona evento de clique para cada card
+            cards.forEach(card => {
+                card.addEventListener('click', function (e) {
+                    // Impede a ação padrão apenas se não for um link
+                    if (e.target.tagName !== 'A') {
+                        const link = this.querySelector('a');
+                        if (link) {
+                            // Animação de clique
+                            this.style.transform = 'scale(0.95)';
+                            setTimeout(() => {
+                                window.location.href = link.href;
+                            }, 200);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
